@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Widget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* CHANGED: Applied Oswald font family */
+            font-family: 'Oswald', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a1a1a;
+        }
+
+        .countdown-container {
+            width: 100%;
+            max-width: 900px;
+            height: 450px;
+            background-image: url('public/images/Gemini_Generated_Image_7tekix7tekix7tek.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .countdown-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            pointer-events: none;
+        }
+
+        .countdown-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .countdown-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .timer-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+        }
+
+        .number {
+            font-size: 80px;
+            font-weight: 700; /* Oswald looks bold at 700 */
+            line-height: 1;
+            /* CHANGED: Explicitly ensuring numbers use the new font */
+            font-family: 'Oswald', sans-serif; 
+            margin-bottom: 15px;
+        }
+
+        .colon {
+            font-size: 70px;
+            font-weight: 700;
+            line-height: 1;
+            margin-top: 5px;
+            font-family: 'Oswald', sans-serif;
+        }
+
+        .label {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .countdown-container {
+                height: 400px;
+            }
+
+            .countdown-title {
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+            .timer-wrapper {
+                gap: 5px;
+            }
+
+            .time-block {
+                width: auto;
+                min-width: 60px;
+            }
+
+            .number {
+                font-size: 42px;
+                margin-bottom: 10px;
+            }
+
+            .colon {
+                font-size: 38px;
+            }
+
+            .label {
+                font-size: 10px;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown-container">
+        <div class="countdown-content">
+            <div class="countdown-title">Countdown to Yeezy Boost 750</div>
+            
+            <div class="timer-wrapper">
+                <div class="time-block">
+                    <div class="number" id="days">00</div>
+                    <div class="label">Days</div>
+                </div>
+                
+                <div class="colon">:</div>
+
+                <div class="time-block">
+                    <div class="number" id="hours">00</div>
+                    <div class="label">Hours</div>
+                </div>
+
+                <div class="colon">:</div>
+
+                <div class="time-block">
+                    <div class="number" id="minutes">00</div>
+                    <div class="label">Mins</div>
+                </div>
+
+                <div class="colon">:</div>
+
+                <div class="time-block">
+                    <div class="number" id="seconds">00</div>
+                    <div class="label">Secs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Get the current time in milliseconds
+        const nowStart = new Date().getTime();
+
+        // 2. Set the target date to 7 days from now
+        // Math: 7 days * 24 hours * 60 minutes * 60 seconds * 1000 milliseconds
+        const targetDate = nowStart + (7 * 24 * 60 * 60 * 1000);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                ['days', 'hours', 'minutes', 'seconds'].forEach(id => {
+                    document.getElementById(id).textContent = '00';
+                });
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const formatNumber = (num) => String(num).padStart(2, '0');
+
+            document.getElementById('days').textContent = formatNumber(days);
+            document.getElementById('hours').textContent = formatNumber(hours);
+            document.getElementById('minutes').textContent = formatNumber(minutes);
+            document.getElementById('seconds').textContent = formatNumber(seconds);
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
